@@ -11,39 +11,18 @@ Text Domain: enhanced-save
 Domain Path: /languages/
 */
 
-// Add the "Save As" button to the editor toolbar
-add_filter('mce_buttons', 'add_enhanced_save_button');
-function add_enhanced_save_button($buttons) {
-    array_push($buttons, 'enhanced_save');
-    return $buttons;
+
+add_action('enqueue_block_editor_assets', 'my_plugin_enqueue_scripts');
+function my_plugin_enqueue_scripts() {
+  wp_enqueue_script(
+    'my-plugin-save-as-script',
+    plugins_url('src/save-as-button.js', __FILE__),
+    [ 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor' ]
+  );
 }
 
-// Add the script for the "Save As" button functionality
-add_action('admin_enqueue_scripts', 'enhanced_save_script');
-function enhanced_save_script() {
-    wp_enqueue_script('enhanced-save-script', plugins_url('js/enhanced-save.js', __FILE__), array('jquery'));
+add_filter('editPostToolbar', 'my_plugin_add_save_as_button');
+function my_plugin_add_save_as_button($defaultToolbar) {
+  $defaultToolbar[] = 'my-plugin/save-as-button';
+  return $defaultToolbar;
 }
-
-// Create a new draft based on the current post or page
-function create_new_draft() {
-    global $post;
-
-    $new_post = array(
-        'post_title'   => $post->post_title . ' (Copy)',
-        'post_content' => $post->post_content,
-        'post_status'  => 'draft',
-        'post_type'    => $post->post_type,
-        'post_parent'  => $post->post_parent,
-        'menu_order'   => $post->menu_order,
-    );
-
-    $new_post_id = wp_insert_post($new_post);
-
-    if ( ! is_wp_error($new_post_id) ) {
-        wp_redirect(admin_url("post.php?post=$new_post_id&action=edit"));
-        exit;
-    }
-}
-
-// Add the AJAX action to handle the "Save As" button click
-add_action('wp_ajax_enhanced_save', 'create_new_draft');
