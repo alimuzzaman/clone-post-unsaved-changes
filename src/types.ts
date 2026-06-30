@@ -1,5 +1,5 @@
 /**
- * Shared types for the Enhanced Save plugin.
+ * Shared types for the Save As Draft plugin.
  */
 
 // A WordPress REST post object. Only `id` is relied on directly; the rest of

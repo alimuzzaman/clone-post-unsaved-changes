@@ -53,7 +53,7 @@ export const createDraftCopy = async ( title: string ): Promise< RestPost > => {
 
     if ( ! newPost || ! newPost.id ) {
         throw new Error(
-            __( 'No post was returned by the server.', 'enhanced-save' )
+            __( 'No post was returned by the server.', 'save-as-draft' )
         );
     }
     return newPost;
@@ -70,7 +70,7 @@ export const errorMessage = ( err: unknown ): string => {
             return message;
         }
     }
-    return __( 'Unknown error', 'enhanced-save' );
+    return __( 'Unknown error', 'save-as-draft' );
 };
 
 // Copy straight away (used when the user opted out of the dialog), surfacing any
@@ -82,7 +82,7 @@ export const quickCopy = ( title: string ): Promise< void > =>
             ( dispatch( 'core/notices' ) as any ).createErrorNotice(
                 sprintf(
                     // translators: %s: the error message returned by the server.
-                    __( 'Save As failed: %s', 'enhanced-save' ),
+                    __( 'Save As failed: %s', 'save-as-draft' ),
                     errorMessage( err )
                 ),
                 { type: 'snackbar' }

@@ -1,10 +1,25 @@
 {
-  "name": "enhanced-save-plugin",
+  "name": "save-as-draft",
   "version": "1.0.0",
-  "description": "Adds a 'Save As' button to the WordPress editor.",
+  "description": "Adds a 'Save As' button to the WordPress block editor that clones the current post or page into a new draft.",
+  "author": "Alimuzzaman Alim (https://profiles.wordpress.org/alimuzzamanalim/)",
+  "license": "GPL-2.0-or-later",
+  "private": true,
+  "keywords": [
+    "wordpress",
+    "wordpress-plugin",
+    "gutenberg",
+    "block-editor",
+    "save-as"
+  ],
   "scripts": {
     "start": "wp-scripts start",
     "build": "wp-scripts build",
+    "format": "wp-scripts format",
+    "lint:js": "wp-scripts lint-js",
+    "lint:pkg-json": "wp-scripts lint-pkg-json",
+    "packages-update": "wp-scripts packages-update",
+    "plugin-zip": "wp-scripts plugin-zip",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

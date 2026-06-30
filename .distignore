@@ -1,0 +1,30 @@
+# Files and directories excluded when deploying to the WordPress.org SVN
+# repository (e.g. the 10up/action-wordpress-plugin-deploy GitHub Action).
+# The deploy keeps: the main PHP file, readme.txt, build/, languages/, LICENSE.
+#
+# NOTE: `wp-scripts plugin-zip` does NOT read this file — it uses the `files`
+# field in package.json or its own best-practices glob (build/, readme.*,
+# {slug}.php, …). This list only governs the SVN deploy workflow.
+
+# Directories
+/.git
+/.github
+/node_modules
+/src
+/tmp
+
+# Dotfiles & tooling config
+/.distignore
+/.editorconfig
+/.gitattributes
+/.gitignore
+/sandbox.config.json
+/sandbox.config.override.json
+/tsconfig.json
+
+# Dev / meta files
+/CLAUDE.md
+/README.md
+/package.json
+/pnpm-lock.yaml
+/package-lock.json

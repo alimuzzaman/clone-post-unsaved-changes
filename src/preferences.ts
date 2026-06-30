@@ -6,9 +6,9 @@
  */
 
 export const PREF_KEYS = {
-    skipModal: 'enhancedSaveSkipModal',
-    hideToolbar: 'enhancedSaveHideToolbar',
-    hideSidebar: 'enhancedSaveHideSidebar',
+    skipModal: 'saveAsDraftSkipModal',
+    hideToolbar: 'saveAsDraftHideToolbar',
+    hideSidebar: 'saveAsDraftHideSidebar',
 } as const;
 
 export type PrefKey = ( typeof PREF_KEYS )[ keyof typeof PREF_KEYS ];

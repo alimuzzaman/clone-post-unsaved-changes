@@ -4,4 +4,4 @@
 import { registerPlugin } from '@wordpress/plugins';
 import { SaveAsPlugin } from './components/SaveAsPlugin';
 
-registerPlugin( 'enhanced-save', { render: SaveAsPlugin } );
+registerPlugin( 'save-as-draft', { render: SaveAsPlugin } );

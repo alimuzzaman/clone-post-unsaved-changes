@@ -4,33 +4,41 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A small WordPress plugin ("Enhanced Save Functionality") that injects a **"Save As"** button into the Gutenberg block editor toolbar. Clicking it is meant to clone the current post/page into a new draft (title, content, meta, status, visibility, password, featured media) via the REST API and redirect to the new draft's edit screen.
+A WordPress plugin (**"Save As Draft"**, slug/text-domain `save-as-draft`) that adds a **"Save As"** button to the Gutenberg block editor. Clicking it clones the current post/page — including unsaved edits — into a new **draft** (title, content, excerpt, meta, taxonomies, discussion settings, format, template, featured media) via the REST API, then redirects to the new draft's edit screen. The action is exposed in the header toolbar, the post sidebar, and the editor's ⋮ (Options) menu.
 
 ## Commands
 
 ```bash
-pnpm build      # one-off production build via @wordpress/scripts (wp-scripts build)
-pnpm start      # watch mode for development (wp-scripts start)
+pnpm build      # one-off production build via @wordpress/scripts
+pnpm start      # watch mode for development
+pnpm typecheck  # tsc --noEmit (strict type checking)
+pnpm lint:js    # eslint via wp-scripts
+pnpm format     # prettier via wp-scripts
+pnpm plugin-zip # build a distributable plugin zip (honors .distignore)
 ```
 
-There is no test, lint, or single-test command configured. Use `pnpm` (a `pnpm-lock.yaml` is committed).
+A `pnpm-lock.yaml` is committed; use `pnpm`.
 
 ## Architecture
 
 Two halves, connected by the build step:
 
-1. **`enhanced-save.php`** — the WordPress plugin entry point. On `enqueue_block_editor_assets` it loads the compiled bundle from `build/` and reads dependencies/version from the generated `*.asset.php` file. The bundle only runs inside the block editor.
+1. **`save-as-draft.php`** — the plugin entry point. On `enqueue_block_editor_assets` it loads `build/index.js`, reading dependencies/version from the generated `build/index.asset.php` manifest, and registers JS translations via `wp_set_script_translations()`. Has an `ABSPATH` guard and bails if the build output is missing.
 
-2. **`src/save-as-button.js`** — the editor-side source (the only entry point). It:
-   - Reads/writes editor state through `@wordpress/data` stores (`select`/`dispatch` on `core/editor` and `core`) rather than touching the DOM for data.
-   - Creates the "Save As" `<button>` imperatively and injects it into the toolbar (`.editor-header__settings`) by polling via `wp.data.subscribe`, debounced with a `setTimeout`. The button is suppressed on brand-new posts (`isEditedPostNew()`).
-   - `handleSaveAs()` assembles a payload from `getCurrentPost()` plus non-transient entity edits and `POST`s to `/wp/v2/posts`, then redirects to the new post's edit screen.
+2. **`src/`** — the editor source, written in TypeScript/TSX and split into modules:
+   - `index.tsx` — entry; `registerPlugin('save-as-draft', …)`.
+   - `types.ts` — shared types.
+   - `preferences.ts` — typed `localStorage` preference helpers (`saveAsDraft*` keys).
+   - `api/draft.ts` — REST copy logic (`createDraftCopy`, `redirectToEditor`, `quickCopy`); derives the REST route from the post type, retries without meta on rejection.
+   - `hooks/useToolbarSlot.ts` — injects a portal container into `.editor-header__settings`; suppressed on brand-new posts.
+   - `components/SaveAsModal.tsx` — the dialog (title + "don't ask" + hide-button preferences).
+   - `components/SaveAsPlugin.tsx` — orchestration: the three buttons, dialog, and visibility state. State is read via `@wordpress/data` (`core/editor`, `core`); the DOM is touched only to mount the toolbar button.
 
-3. **Build pipeline** — `webpack.config.js` merges `@wordpress/scripts`' default config, overriding the entry to `src/save-as-button.js` and emitting `build/my-plugin-script.js`. `wp-scripts` also generates `build/my-plugin-script.asset.php` (the dependency/version manifest). **Always run `pnpm build` after editing `src/` — the PHP loads the compiled `build/` output, not `src/`.**
+3. **Build pipeline** — `@wordpress/scripts` with **no custom webpack config**: it auto-detects the `src/index.tsx` entry and emits `build/index.js` + `build/index.asset.php`. **Always run `pnpm build` after editing `src/` — the PHP loads the compiled `build/` output, not `src/`.** TypeScript is stripped by Babel at build time; type errors do *not* fail the build, so run `pnpm typecheck` separately.
 
-## Known issues / gotchas (this code is a work-in-progress prototype)
+## Conventions / gotchas
 
-- **Asset filename mismatch:** `enhanced-save.php` includes `build/index.asset.php`, but `wp-scripts` (per `webpack.config.js`) actually emits `build/my-plugin-script.asset.php`. The include path needs to match the configured output filename.
-- **`handleSaveAs()` is unfinished:** it has an early `return;` (line ~41) that short-circuits before the `apiFetch` call, so no save happens — it only `console.log`s. It also references an undefined `getEditedPostMeta`, and sets `featured_media` twice (once incorrectly to the slug). Treat this function as a draft to be fixed, not working behavior.
-- **PHP `add_filter('editPostToolbar', ...)`** has no matching `apply_filters` anywhere, so it's currently a no-op; the button is injected entirely from JS.
-- **`.gitignore` is the full WordPress core ignore list**, not a plugin/Node ignore list — so `node_modules/` and `build/` are *not* ignored. Be deliberate about what you stage.
+- **Text domain must equal the slug** (`save-as-draft`) for WordPress.org language packs. All JS strings use `__`/`sprintf` from `@wordpress/i18n`.
+- **`build/` and `node_modules/` are gitignored** — `build/` must be produced wherever the plugin is packaged/deployed.
+- **WordPress's generated types for `PluginPostStatusInfo` / `PluginMoreMenuItem` are incomplete** (children typed as DOM `Element`, or omitted), so `SaveAsPlugin.tsx` re-types them locally with a documented cast.
+- The ⋮ menu item always renders (even when both buttons are hidden) as the escape hatch back to the dialog and its visibility settings.

@@ -1,6 +1,6 @@
 {
   "mappings": {
-    "wp-content/plugins/enhanced-save": "."
+    "wp-content/plugins/save-as-draft": "."
   },
   "config": {
     "WP_DEBUG": true,

@@ -1,48 +1,60 @@
-## Enhanced Save Functionality
+# Save As Draft
 
-This plugin adds a "Save As" button to the WordPress editor, allowing users to easily create a new draft based on the current post or page.
+Adds a **Save As** button to the WordPress block editor that clones the current post or page — including unsaved changes — into a new draft and opens it.
 
-**Features:**
+- **Author:** [Alimuzzaman Alim](https://profiles.wordpress.org/alimuzzamanalim/)
+- **Requires:** WordPress 6.6+ · PHP 7.4+
+- **License:** GPL-2.0-or-later
 
-* Create new drafts quickly and easily.
-* Inherits title, content, and other metadata from the original post/page.
-* Customizable behavior through plugin code modification (optional).
+> For the end-user description, installation, and FAQ, see [`readme.txt`](readme.txt) (the WordPress.org-formatted readme). This file is the developer guide.
 
-**Installation**
+## What it does
 
-1. **Clone or Download:** Clone the repository using Git or download the ZIP file from your preferred source.
-2. **Upload:** Upload the entire `enhanced-save` folder to your `/wp-content/plugins/` directory.
-3. **Activate:** Activate the plugin through the 'Plugins' menu in WordPress.
+One click copies the post you are editing into a brand-new **draft** and redirects you to it — the original is never touched. It copies title, content, excerpt, featured image, taxonomies, discussion settings, format, template, and REST-exposed post meta, and works for posts, pages, and public custom post types.
 
-**Usage**
+The action is exposed in three places:
 
-1. **Edit a Post or Page:** Open the post or page you want to create a new draft from.
-2. **Click "Save As":** Click the "Save As" button in the editor toolbar (screenshot coming soon!).
-3. **New Draft Created:** A new draft will be created, and you will be redirected to the edit screen of the new draft.
+- the editor header toolbar (next to the native *Save*),
+- the post status sidebar,
+- the editor **⋮ (Options)** menu (always available — the escape hatch when the other two are hidden).
 
-**Additional Notes**
+A dialog lets you name the copy and toggle visibility preferences (persisted per-browser in `localStorage`).
 
-* The new draft will inherit the title, content, and other relevant metadata from the original post or page.
-* You can customize the behavior of the "Save As" button by modifying the plugin's code. For instructions, see the `developer.md` file (if included).
+## Development
 
-**Support**
+```bash
+pnpm install     # install dependencies
+pnpm start       # development build, watch mode
+pnpm build       # one-off production build
+pnpm typecheck   # tsc --noEmit (strict type checking)
+```
 
-For support, please visit the plugin's GitHub repository [link to your repo] or contact the author.
+> **Always run `pnpm build` after editing `src/`** — the PHP loads the compiled `build/` output, not `src/`. `build/` is gitignored, so it must be produced wherever the plugin is packaged/deployed.
 
-**Contributing**
+## Architecture
 
-We welcome contributions to this plugin! Please see the `CONTRIBUTING.md` file (if included) for guidelines on how to contribute.
+The editor source is written in TypeScript/TSX and split into focused modules:
 
-**License**
+```
+src/
+  index.tsx                  Entry point — registers the editor plugin.
+  types.ts                   Shared types (RestPost, DraftPayload).
+  preferences.ts             Typed localStorage preference helpers.
+  api/draft.ts               REST copy logic: createDraftCopy, redirect, quickCopy.
+  hooks/useToolbarSlot.ts    Injects a portal slot into the editor header toolbar.
+  components/
+    SaveAsModal.tsx          The dialog (title + preference checkboxes).
+    SaveAsPlugin.tsx         Orchestration: buttons, menu, dialog, visibility state.
+```
 
-This plugin is licensed under the GNU General Public License (GPL) v2 or later. See the `LICENSE` file for details.
+- **State** is read/written through `@wordpress/data` stores (`core/editor`, `core`); the DOM is touched only to mount the toolbar button.
+- **`save-as-draft.php`** enqueues the compiled bundle on `enqueue_block_editor_assets`, reading dependencies/version from the generated `*.asset.php` manifest, and registers JS translations via `wp_set_script_translations()`.
+- **Build:** [`@wordpress/scripts`](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-scripts/) with zero config — it auto-detects the `src/index.tsx` entry and emits `build/index.js` (+ `build/index.asset.php`). `wp-scripts` strips TypeScript via Babel at build time; `pnpm typecheck` runs `tsc` separately. Run `pnpm plugin-zip` to produce a distributable zip (see `.distignore`).
 
-**Screenshots**
+## Internationalization
 
-(Here, you can add screenshots showcasing the plugin's functionality, particularly the "Save As" button location within the editor)
+All user-facing strings use `__`/`sprintf` from `@wordpress/i18n` with the `save-as-draft` text domain, wired for translation via `wp_set_script_translations()`. The text domain matches the plugin slug, as required for WordPress.org language packs.
 
-**Note:**
+## License
 
-* This `readme.md` utilizes Markdown formatting for a more visually appealing presentation.
-* Replace bracketed information like "[link to your repo]" with the appropriate details.
-* Consider including additional files like `CONTRIBUTING.md` and `developer.md` if you plan on accepting contributions or providing developer documentation.
+[GPL-2.0-or-later](https://www.gnu.org/licenses/gpl-2.0.html)

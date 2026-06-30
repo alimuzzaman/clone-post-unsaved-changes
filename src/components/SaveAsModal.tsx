@@ -53,20 +53,20 @@ export const SaveAsModal = ( {
 
     return (
         <Modal
-            title={ __( 'Save As', 'enhanced-save' ) }
+            title={ __( 'Save As', 'save-as-draft' ) }
             onRequestClose={ busy ? () => undefined : onClose }
         >
             { error && (
                 <Notice status="error" isDismissible={ false }>
                     { sprintf(
                         // translators: %s: the error message returned by the server.
-                        __( 'Could not create the copy: %s', 'enhanced-save' ),
+                        __( 'Could not create the copy: %s', 'save-as-draft' ),
                         error
                     ) }
                 </Notice>
             ) }
             <TextControl
-                label={ __( 'Title for the copy', 'enhanced-save' ) }
+                label={ __( 'Title for the copy', 'save-as-draft' ) }
                 value={ title }
                 onChange={ setTitle }
                 __next40pxDefaultSize
@@ -74,10 +74,10 @@ export const SaveAsModal = ( {
             />
             <div style={ { marginTop: '16px' } }>
                 <CheckboxControl
-                    label={ __( "Don't ask next time", 'enhanced-save' ) }
+                    label={ __( "Don't ask next time", 'save-as-draft' ) }
                     help={ __(
                         'You can reopen this dialog by Ctrl/⌘-clicking the “Save As” button.',
-                        'enhanced-save'
+                        'save-as-draft'
                     ) }
                     checked={ dontAsk }
                     onChange={ setDontAsk }
@@ -86,7 +86,7 @@ export const SaveAsModal = ( {
             </div>
             <div style={ { marginTop: '16px' } }>
                 <CheckboxControl
-                    label={ __( 'Hide the toolbar button', 'enhanced-save' ) }
+                    label={ __( 'Hide the toolbar button', 'save-as-draft' ) }
                     checked={ hideToolbar }
                     onChange={ onToggleToolbar }
                     __nextHasNoMarginBottom
@@ -94,10 +94,10 @@ export const SaveAsModal = ( {
             </div>
             <div style={ { marginTop: '12px' } }>
                 <CheckboxControl
-                    label={ __( 'Hide the sidebar button', 'enhanced-save' ) }
+                    label={ __( 'Hide the sidebar button', 'save-as-draft' ) }
                     help={ __(
                         'The “Save As” item in the ⋮ menu always stays available.',
-                        'enhanced-save'
+                        'save-as-draft'
                     ) }
                     checked={ hideSidebar }
                     onChange={ onToggleSidebar }
@@ -106,7 +106,7 @@ export const SaveAsModal = ( {
             </div>
             <Flex justify="flex-end" gap={ 3 } style={ { marginTop: '24px' } }>
                 <Button variant="tertiary" onClick={ onClose } disabled={ busy }>
-                    { __( 'Cancel', 'enhanced-save' ) }
+                    { __( 'Cancel', 'save-as-draft' ) }
                 </Button>
                 <Button
                     variant="primary"
@@ -116,8 +116,8 @@ export const SaveAsModal = ( {
                     __next40pxDefaultSize
                 >
                     { busy
-                        ? __( 'Creating…', 'enhanced-save' )
-                        : __( 'Create draft', 'enhanced-save' ) }
+                        ? __( 'Creating…', 'save-as-draft' )
+                        : __( 'Create draft', 'save-as-draft' ) }
                 </Button>
             </Flex>
         </Modal>

@@ -75,7 +75,7 @@ export const SaveAsPlugin = () => {
         return null;
     }
 
-    const label = __( 'Save As', 'enhanced-save' );
+    const label = __( 'Save As', 'save-as-draft' );
 
     return (
         <>

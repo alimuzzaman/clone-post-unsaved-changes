@@ -1,33 +1,75 @@
-Plugin Name: Enhanced Save Functionality
-Plugin URI: https://your-website.com/enhanced-save
-Description: Adds a "Save As" button to WordPress editor, allowing users to create a new draft based on the current post or page.
-Version: 1.0
-Author: Your Name
-Author URI: https://your-website.com
+=== Save As Draft ===
+Contributors: alimuzzamanalim
+Tags: save as, duplicate, clone, draft, block editor
+Requires at least: 6.6
+Tested up to: 7.0
+Requires PHP: 7.4
+Stable tag: 1.0.0
 License: GPLv2 or later
-Text Domain: enhanced-save
-Domain Path: /languages/
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-# Enhanced Save Functionality
+Clone any post or page into a new draft with one click, right from the block editor.
 
-This plugin adds a "Save As" button to the WordPress editor, allowing users to easily create a new draft based on the current post or page.
+== Description ==
 
-**Installation**
+**Save As Draft** adds a **Save As** button to the WordPress block editor. One click copies the post you are editing — including its unsaved changes — into a brand-new draft and opens it, so you can branch, version, or template your content without manually duplicating anything.
 
-1. **Upload:** Upload the entire `enhanced-save` folder to your `/wp-content/plugins/` directory.
-2. **Activate:** Activate the plugin through the 'Plugins' menu in WordPress.
+It works for posts, pages, and any public custom post type, and copies the title, content, excerpt, featured image, taxonomies, discussion settings, format, template, and post meta.
 
-**Usage**
+= Features =
 
-1. **Edit a Post or Page:** Open the post or page you want to create a new draft from.
-2. **Click "Save As":** Click the "Save As" button in the editor toolbar.
-3. **New Draft Created:** A new draft will be created, and you will be redirected to the edit screen of the new draft.
+* **Save As button** in the editor header, next to the native *Save* button.
+* The same action is also available in the post sidebar and the editor's **⋮ (Options)** menu.
+* A confirmation dialog lets you set the new draft's title before copying.
+* **"Don't ask next time"** turns the dialog off for instant copies — Ctrl/⌘-click the button to bring it back.
+* Hide the toolbar and/or sidebar button from the dialog; the **⋮** menu item always stays available.
+* Copies are always created as **drafts**, so you never overwrite the original.
+* Fully translatable (proper `wp_set_script_translations` integration).
 
-**Additional Notes**
+= How it works =
 
-* The new draft will inherit the title, content, and other relevant metadata from the original post or page.
-* You can customize the behavior of the "Save As" button by modifying the plugin's code.
+The plugin reads the current editor state (including unsaved edits) and creates a new draft through the WordPress REST API, then redirects you to the new draft's edit screen. Nothing is changed on the original post.
 
-**Support**
+== Installation ==
 
-For support, please visit the plugin's GitHub repository or contact the author.
+1. Upload the `save-as-draft` folder to the `/wp-content/plugins/` directory, or install the plugin through the **Plugins** screen in WordPress.
+2. Activate the plugin through the **Plugins** screen.
+3. Edit any existing post or page — the **Save As** button appears in the editor toolbar.
+
+== Frequently Asked Questions ==
+
+= Does it work on new, unsaved posts? =
+
+No. There is nothing to copy until a post has been saved at least once, so the button is hidden on brand-new posts.
+
+= Does it copy my unsaved changes? =
+
+Yes. The copy is built from the current editor state, so edits you have not saved yet are included in the new draft.
+
+= Does it work with pages and custom post types? =
+
+Yes. The REST route is derived from the current post type, so posts, pages, and public custom post types are all supported.
+
+= What gets copied? =
+
+Title, content, excerpt, featured image, categories and tags, discussion (comment/ping) settings, post format, page template, and post meta exposed to the REST API.
+
+= I hid both buttons — how do I get them back? =
+
+Open the editor's **⋮ (Options)** menu and choose **Save As**; that item is always available. Uncheck the "Hide" options in the dialog.
+
+== Screenshots ==
+
+1. The Save As button in the block editor toolbar.
+2. The Save As dialog with title, "don't ask", and visibility options.
+3. The Save As action in the post sidebar.
+
+== Changelog ==
+
+= 1.0.0 =
+* Initial release.
+
+== Upgrade Notice ==
+
+= 1.0.0 =
+Initial release.
