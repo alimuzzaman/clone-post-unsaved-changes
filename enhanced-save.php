@@ -14,15 +14,13 @@ Domain Path: /languages/
 
 add_action('enqueue_block_editor_assets', 'my_plugin_enqueue_scripts');
 function my_plugin_enqueue_scripts() {
-  wp_enqueue_script(
-    'my-plugin-save-as-script',
-    plugins_url('src/save-as-button.js', __FILE__),
-    [ 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor' ]
-  );
-}
+    $asset_file = include plugin_dir_path(__FILE__) . 'build/my-plugin-script.asset.php';
 
-add_filter('editPostToolbar', 'my_plugin_add_save_as_button');
-function my_plugin_add_save_as_button($defaultToolbar) {
-  $defaultToolbar[] = 'my-plugin/save-as-button';
-  return $defaultToolbar;
-}
+    wp_enqueue_script(
+      'enhanced_save_script',
+      plugins_url('build/my-plugin-script.js', __FILE__),
+      $asset_file['dependencies'],
+      $asset_file['version'],
+      true
+    );
+  }

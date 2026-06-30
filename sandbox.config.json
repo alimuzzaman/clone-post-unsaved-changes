@@ -1,0 +1,9 @@
+{
+  "mappings": {
+    "wp-content/plugins/enhanced-save": "."
+  },
+  "config": {
+    "WP_DEBUG": true,
+    "WP_DEBUG_LOG": true
+  }
+}
