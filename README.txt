@@ -58,6 +58,12 @@ Title, content, excerpt, featured image, categories and tags, discussion (commen
 
 Open the editor's **⋮ (Options)** menu and choose **Save As**; that item is always available. Uncheck the "Hide" options in the dialog.
 
+== Development ==
+
+Development happens on GitHub. Bug reports, feature requests, and pull requests are welcome:
+
+[https://github.com/alimuzzaman/save-as-draft](https://github.com/alimuzzaman/save-as-draft)
+
 == Screenshots ==
 
 1. The Save As button in the block editor toolbar.
