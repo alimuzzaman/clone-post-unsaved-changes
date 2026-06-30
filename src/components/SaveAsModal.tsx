@@ -1,0 +1,125 @@
+/**
+ * The Save As dialog: title for the copy, plus the "don't ask" and
+ * button-visibility preferences.
+ */
+import { __, sprintf } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
+import {
+    Button,
+    Modal,
+    TextControl,
+    CheckboxControl,
+    Notice,
+    Flex,
+} from '@wordpress/components';
+import { getPref, setPref, PREF_KEYS } from '../preferences';
+import { createDraftCopy, redirectToEditor, errorMessage } from '../api/draft';
+
+export interface SaveAsModalProps {
+    defaultTitle: string;
+    onClose: () => void;
+    hideToolbar: boolean;
+    hideSidebar: boolean;
+    onToggleToolbar: ( hide: boolean ) => void;
+    onToggleSidebar: ( hide: boolean ) => void;
+}
+
+export const SaveAsModal = ( {
+    defaultTitle,
+    onClose,
+    hideToolbar,
+    hideSidebar,
+    onToggleToolbar,
+    onToggleSidebar,
+}: SaveAsModalProps ) => {
+    const [ title, setTitle ] = useState( defaultTitle );
+    const [ dontAsk, setDontAsk ] = useState( getPref( PREF_KEYS.skipModal ) );
+    const [ busy, setBusy ] = useState( false );
+    const [ error, setError ] = useState( '' );
+
+    const submit = async () => {
+        setBusy( true );
+        setError( '' );
+        setPref( PREF_KEYS.skipModal, dontAsk );
+        try {
+            const newPost = await createDraftCopy( title.trim() );
+            redirectToEditor( newPost.id ); // leaves the page on success
+        } catch ( err ) {
+            // Keep the modal open so the user can retry / adjust the title.
+            setError( errorMessage( err ) );
+            setBusy( false );
+        }
+    };
+
+    return (
+        <Modal
+            title={ __( 'Save As', 'enhanced-save' ) }
+            onRequestClose={ busy ? () => undefined : onClose }
+        >
+            { error && (
+                <Notice status="error" isDismissible={ false }>
+                    { sprintf(
+                        // translators: %s: the error message returned by the server.
+                        __( 'Could not create the copy: %s', 'enhanced-save' ),
+                        error
+                    ) }
+                </Notice>
+            ) }
+            <TextControl
+                label={ __( 'Title for the copy', 'enhanced-save' ) }
+                value={ title }
+                onChange={ setTitle }
+                __next40pxDefaultSize
+                __nextHasNoMarginBottom
+            />
+            <div style={ { marginTop: '16px' } }>
+                <CheckboxControl
+                    label={ __( "Don't ask next time", 'enhanced-save' ) }
+                    help={ __(
+                        'You can reopen this dialog by Ctrl/⌘-clicking the “Save As” button.',
+                        'enhanced-save'
+                    ) }
+                    checked={ dontAsk }
+                    onChange={ setDontAsk }
+                    __nextHasNoMarginBottom
+                />
+            </div>
+            <div style={ { marginTop: '16px' } }>
+                <CheckboxControl
+                    label={ __( 'Hide the toolbar button', 'enhanced-save' ) }
+                    checked={ hideToolbar }
+                    onChange={ onToggleToolbar }
+                    __nextHasNoMarginBottom
+                />
+            </div>
+            <div style={ { marginTop: '12px' } }>
+                <CheckboxControl
+                    label={ __( 'Hide the sidebar button', 'enhanced-save' ) }
+                    help={ __(
+                        'The “Save As” item in the ⋮ menu always stays available.',
+                        'enhanced-save'
+                    ) }
+                    checked={ hideSidebar }
+                    onChange={ onToggleSidebar }
+                    __nextHasNoMarginBottom
+                />
+            </div>
+            <Flex justify="flex-end" gap={ 3 } style={ { marginTop: '24px' } }>
+                <Button variant="tertiary" onClick={ onClose } disabled={ busy }>
+                    { __( 'Cancel', 'enhanced-save' ) }
+                </Button>
+                <Button
+                    variant="primary"
+                    onClick={ submit }
+                    isBusy={ busy }
+                    disabled={ busy || ! title.trim() }
+                    __next40pxDefaultSize
+                >
+                    { busy
+                        ? __( 'Creating…', 'enhanced-save' )
+                        : __( 'Create draft', 'enhanced-save' ) }
+                </Button>
+            </Flex>
+        </Modal>
+    );
+};

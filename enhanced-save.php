@@ -23,4 +23,11 @@ function my_plugin_enqueue_scripts() {
       $asset_file['version'],
       true
     );
+
+    // Make the @wordpress/i18n strings (__/sprintf) in the bundle translatable.
+    wp_set_script_translations(
+      'enhanced_save_script',
+      'enhanced-save',
+      plugin_dir_path(__FILE__) . 'languages'
+    );
   }

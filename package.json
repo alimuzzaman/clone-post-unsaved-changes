@@ -4,13 +4,23 @@
   "description": "Adds a 'Save As' button to the WordPress editor.",
   "scripts": {
     "start": "wp-scripts start",
-    "build": "wp-scripts build"
+    "build": "wp-scripts build",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@wordpress/api-fetch": "^7.12.0",
+    "@wordpress/components": "^28.12.0",
+    "@wordpress/data": "^10.12.0",
     "@wordpress/editor": "^14.12.0",
+    "@wordpress/element": "^6.12.0",
+    "@wordpress/i18n": "^5.12.0",
     "@wordpress/icons": "^10.12.0",
     "@wordpress/plugins": "^7.12.0",
     "@wordpress/scripts": "^30.5.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.6.0"
   }
 }
