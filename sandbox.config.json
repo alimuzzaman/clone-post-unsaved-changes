@@ -1,4 +1,7 @@
 {
+  "plugins": [
+    "plugin-check"
+  ],
   "mappings": {
     "wp-content/plugins/save-as-draft": "."
   },
