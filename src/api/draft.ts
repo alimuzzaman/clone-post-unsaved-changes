@@ -53,7 +53,7 @@ export const createDraftCopy = async ( title: string ): Promise< RestPost > => {
 
     if ( ! newPost || ! newPost.id ) {
         throw new Error(
-            __( 'No post was returned by the server.', 'save-as-draft' )
+            __( 'No post was returned by the server.', 'clone-post-unsaved-changes' )
         );
     }
     return newPost;
@@ -70,7 +70,7 @@ export const errorMessage = ( err: unknown ): string => {
             return message;
         }
     }
-    return __( 'Unknown error', 'save-as-draft' );
+    return __( 'Unknown error', 'clone-post-unsaved-changes' );
 };
 
 // Copy straight away (used when the user opted out of the dialog), surfacing any
@@ -82,7 +82,7 @@ export const quickCopy = ( title: string ): Promise< void > =>
             ( dispatch( 'core/notices' ) as any ).createErrorNotice(
                 sprintf(
                     // translators: %s: the error message returned by the server.
-                    __( 'Save As failed: %s', 'save-as-draft' ),
+                    __( 'Save As failed: %s', 'clone-post-unsaved-changes' ),
                     errorMessage( err )
                 ),
                 { type: 'snackbar' }

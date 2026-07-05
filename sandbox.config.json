@@ -3,7 +3,7 @@
     "plugin-check"
   ],
   "mappings": {
-    "wp-content/plugins/save-as-draft": "."
+    "wp-content/plugins/clone-post-unsaved-changes": "."
   },
   "config": {
     "WP_DEBUG": true,

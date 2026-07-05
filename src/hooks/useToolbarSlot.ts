@@ -23,7 +23,7 @@ export const useToolbarSlot = ( enabled: boolean ): HTMLElement | null => {
                 return false;
             }
             node = document.createElement( 'div' );
-            node.className = 'save-as-draft__toolbar-slot';
+            node.className = 'clone-post-unsaved-changes__toolbar-slot';
             node.style.display = 'flex';
             node.style.alignItems = 'center';
             settings.prepend( node ); // sit before the native Save/Publish buttons

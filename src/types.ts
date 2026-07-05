@@ -1,5 +1,5 @@
 /**
- * Shared types for the Save As Draft plugin.
+ * Shared types for the Clone Post with Unsaved Changes plugin.
  */
 
 // A WordPress REST post object. Only `id` is relied on directly; the rest of

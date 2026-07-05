@@ -53,20 +53,20 @@ export const SaveAsModal = ( {
 
     return (
         <Modal
-            title={ __( 'Save As', 'save-as-draft' ) }
+            title={ __( 'Save As', 'clone-post-unsaved-changes' ) }
             onRequestClose={ busy ? () => undefined : onClose }
         >
             { error && (
                 <Notice status="error" isDismissible={ false }>
                     { sprintf(
                         // translators: %s: the error message returned by the server.
-                        __( 'Could not create the copy: %s', 'save-as-draft' ),
+                        __( 'Could not create the copy: %s', 'clone-post-unsaved-changes' ),
                         error
                     ) }
                 </Notice>
             ) }
             <TextControl
-                label={ __( 'Title for the copy', 'save-as-draft' ) }
+                label={ __( 'Title for the copy', 'clone-post-unsaved-changes' ) }
                 value={ title }
                 onChange={ setTitle }
                 __next40pxDefaultSize
@@ -74,10 +74,10 @@ export const SaveAsModal = ( {
             />
             <div style={ { marginTop: '16px' } }>
                 <CheckboxControl
-                    label={ __( "Don't ask next time", 'save-as-draft' ) }
+                    label={ __( "Don't ask next time", 'clone-post-unsaved-changes' ) }
                     help={ __(
                         'You can reopen this dialog by Ctrl/⌘-clicking the “Save As” button.',
-                        'save-as-draft'
+                        'clone-post-unsaved-changes'
                     ) }
                     checked={ dontAsk }
                     onChange={ setDontAsk }
@@ -86,7 +86,7 @@ export const SaveAsModal = ( {
             </div>
             <div style={ { marginTop: '16px' } }>
                 <CheckboxControl
-                    label={ __( 'Hide the toolbar button', 'save-as-draft' ) }
+                    label={ __( 'Hide the toolbar button', 'clone-post-unsaved-changes' ) }
                     checked={ hideToolbar }
                     onChange={ onToggleToolbar }
                     __nextHasNoMarginBottom
@@ -94,10 +94,10 @@ export const SaveAsModal = ( {
             </div>
             <div style={ { marginTop: '12px' } }>
                 <CheckboxControl
-                    label={ __( 'Hide the sidebar button', 'save-as-draft' ) }
+                    label={ __( 'Hide the sidebar button', 'clone-post-unsaved-changes' ) }
                     help={ __(
                         'The “Save As” item in the ⋮ menu always stays available.',
-                        'save-as-draft'
+                        'clone-post-unsaved-changes'
                     ) }
                     checked={ hideSidebar }
                     onChange={ onToggleSidebar }
@@ -106,7 +106,7 @@ export const SaveAsModal = ( {
             </div>
             <Flex justify="flex-end" gap={ 3 } style={ { marginTop: '24px' } }>
                 <Button variant="tertiary" onClick={ onClose } disabled={ busy }>
-                    { __( 'Cancel', 'save-as-draft' ) }
+                    { __( 'Cancel', 'clone-post-unsaved-changes' ) }
                 </Button>
                 <Button
                     variant="primary"
@@ -116,8 +116,8 @@ export const SaveAsModal = ( {
                     __next40pxDefaultSize
                 >
                     { busy
-                        ? __( 'Creating…', 'save-as-draft' )
-                        : __( 'Create draft', 'save-as-draft' ) }
+                        ? __( 'Creating…', 'clone-post-unsaved-changes' )
+                        : __( 'Create draft', 'clone-post-unsaved-changes' ) }
                 </Button>
             </Flex>
         </Modal>

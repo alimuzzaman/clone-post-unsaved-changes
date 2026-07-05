@@ -6,18 +6,21 @@
  */
 
 export const PREF_KEYS = {
-    skipModal: 'saveAsDraftSkipModal',
-    hideToolbar: 'saveAsDraftHideToolbar',
-    hideSidebar: 'saveAsDraftHideSidebar',
+    skipModal: 'clonePostUnsavedChangesSkipModal',
+    hideToolbar: 'clonePostUnsavedChangesHideToolbar',
+    hideSidebar: 'clonePostUnsavedChangesHideSidebar',
 } as const;
 
 export type PrefKey = ( typeof PREF_KEYS )[ keyof typeof PREF_KEYS ];
 
-export const getPref = ( key: PrefKey ): boolean => {
+export const getPref = ( key: PrefKey, defaultValue = false ): boolean => {
     try {
-        return window.localStorage.getItem( key ) === '1';
+        const stored = window.localStorage.getItem( key );
+        // Fall back to the default only when the user hasn't chosen yet;
+        // an explicit '0'/'1' always wins.
+        return stored === null ? defaultValue : stored === '1';
     } catch ( e ) {
-        return false;
+        return defaultValue;
     }
 };
 

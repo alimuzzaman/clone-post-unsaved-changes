@@ -4,4 +4,4 @@
 import { registerPlugin } from '@wordpress/plugins';
 import { SaveAsPlugin } from './components/SaveAsPlugin';
 
-registerPlugin( 'save-as-draft', { render: SaveAsPlugin } );
+registerPlugin( 'clone-post-unsaved-changes', { render: SaveAsPlugin } );

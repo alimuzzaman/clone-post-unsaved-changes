@@ -1,6 +1,6 @@
-=== Save As Draft ===
+=== Clone Post with Unsaved Changes to a Draft ===
 Contributors: alimuzzamanalim
-Tags: save as, duplicate, clone, draft, block editor
+Tags: duplicate post, duplicate page, clone, copy, draft
 Requires at least: 6.6
 Tested up to: 7.0
 Requires PHP: 7.4
@@ -8,11 +8,11 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Clone any post or page into a new draft with one click, right from the block editor.
+Duplicate or clone any post or page into a new draft — including unsaved changes — in one click, right from the block editor.
 
 == Description ==
 
-**Save As Draft** adds a **Save As** button to the WordPress block editor. One click copies the post you are editing — including its unsaved changes — into a brand-new draft and opens it, so you can branch, version, or template your content without manually duplicating anything.
+**Clone Post with Unsaved Changes to a Draft** adds a **Save As** button to the WordPress block editor. One click copies the post you are editing — including its unsaved changes — into a brand-new draft and opens it, so you can branch, version, or template your content without manually duplicating anything.
 
 It works for posts, pages, and any public custom post type, and copies the title, content, excerpt, featured image, taxonomies, discussion settings, format, template, and post meta.
 
@@ -32,7 +32,7 @@ The plugin reads the current editor state (including unsaved edits) and creates 
 
 == Installation ==
 
-1. Upload the `save-as-draft` folder to the `/wp-content/plugins/` directory, or install the plugin through the **Plugins** screen in WordPress.
+1. Upload the `clone-post-unsaved-changes` folder to the `/wp-content/plugins/` directory, or install the plugin through the **Plugins** screen in WordPress.
 2. Activate the plugin through the **Plugins** screen.
 3. Edit any existing post or page — the **Save As** button appears in the editor toolbar.
 

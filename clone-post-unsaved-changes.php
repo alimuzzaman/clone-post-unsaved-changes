@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name:       Save As Draft
- * Plugin URI:        https://wordpress.org/plugins/save-as-draft/
+ * Plugin Name:       Clone Post with Unsaved Changes to a Draft
+ * Plugin URI:        https://wordpress.org/plugins/clone-post-unsaved-changes/
  * Description:       Adds a "Save As" button to the block editor that clones the current post or page into a new draft.
  * Version:           1.0.0
  * Requires at least: 6.6
@@ -10,17 +10,17 @@
  * Author URI:        https://profiles.wordpress.org/alimuzzamanalim/
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       save-as-draft
+ * Text Domain:       clone-post-unsaved-changes
  * Domain Path:       /languages
  *
- * @package SaveAsDraft
+ * @package ClonePostUnsavedChanges
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-add_action( 'enqueue_block_editor_assets', 'save_as_draft_enqueue_block_editor_assets' );
+add_action( 'enqueue_block_editor_assets', 'clone_post_unsaved_changes_enqueue_block_editor_assets' );
 
 /**
  * Enqueue the compiled block-editor bundle and register its JS translations.
@@ -30,7 +30,7 @@ add_action( 'enqueue_block_editor_assets', 'save_as_draft_enqueue_block_editor_a
  *
  * @return void
  */
-function save_as_draft_enqueue_block_editor_assets() {
+function clone_post_unsaved_changes_enqueue_block_editor_assets() {
 	$asset_path = plugin_dir_path( __FILE__ ) . 'build/index.asset.php';
 
 	// Bail quietly if the bundle hasn't been built yet (run `pnpm build`).
@@ -41,7 +41,7 @@ function save_as_draft_enqueue_block_editor_assets() {
 	$asset = include $asset_path;
 
 	wp_enqueue_script(
-		'save-as-draft-script',
+		'clone-post-unsaved-changes-script',
 		plugins_url( 'build/index.js', __FILE__ ),
 		$asset['dependencies'],
 		$asset['version'],
@@ -50,8 +50,8 @@ function save_as_draft_enqueue_block_editor_assets() {
 
 	// Make the @wordpress/i18n strings (__/sprintf) in the bundle translatable.
 	wp_set_script_translations(
-		'save-as-draft-script',
-		'save-as-draft',
+		'clone-post-unsaved-changes-script',
+		'clone-post-unsaved-changes',
 		plugin_dir_path( __FILE__ ) . 'languages'
 	);
 }

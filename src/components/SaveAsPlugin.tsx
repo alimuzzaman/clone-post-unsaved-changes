@@ -34,8 +34,10 @@ export const SaveAsPlugin = () => {
     const [ hideToolbar, setHideToolbar ] = useState(
         getPref( PREF_KEYS.hideToolbar )
     );
+    // The sidebar button is hidden by default (the toolbar button and ⋮ menu
+    // item remain); users can opt back in from the dialog's visibility settings.
     const [ hideSidebar, setHideSidebar ] = useState(
-        getPref( PREF_KEYS.hideSidebar )
+        getPref( PREF_KEYS.hideSidebar, true )
     );
 
     const toggleHideToolbar = ( hide: boolean ) => {
@@ -75,7 +77,7 @@ export const SaveAsPlugin = () => {
         return null;
     }
 
-    const label = __( 'Save As', 'save-as-draft' );
+    const label = __( 'Save As', 'clone-post-unsaved-changes' );
 
     return (
         <>

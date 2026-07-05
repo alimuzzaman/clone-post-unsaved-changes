@@ -1,4 +1,4 @@
-# Save As Draft
+# Clone Post with Unsaved Changes to a Draft
 
 Adds a **Save As** button to the WordPress block editor that clones the current post or page — including unsaved changes — into a new draft and opens it.
 
@@ -48,12 +48,12 @@ src/
 ```
 
 - **State** is read/written through `@wordpress/data` stores (`core/editor`, `core`); the DOM is touched only to mount the toolbar button.
-- **`save-as-draft.php`** enqueues the compiled bundle on `enqueue_block_editor_assets`, reading dependencies/version from the generated `*.asset.php` manifest, and registers JS translations via `wp_set_script_translations()`.
+- **`clone-post-unsaved-changes.php`** enqueues the compiled bundle on `enqueue_block_editor_assets`, reading dependencies/version from the generated `*.asset.php` manifest, and registers JS translations via `wp_set_script_translations()`.
 - **Build:** [`@wordpress/scripts`](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-scripts/) with zero config — it auto-detects the `src/index.tsx` entry and emits `build/index.js` (+ `build/index.asset.php`). `wp-scripts` strips TypeScript via Babel at build time; `pnpm typecheck` runs `tsc` separately. Run `pnpm plugin-zip` to produce a distributable zip (see `.distignore`).
 
 ## Internationalization
 
-All user-facing strings use `__`/`sprintf` from `@wordpress/i18n` with the `save-as-draft` text domain, wired for translation via `wp_set_script_translations()`. The text domain matches the plugin slug, as required for WordPress.org language packs.
+All user-facing strings use `__`/`sprintf` from `@wordpress/i18n` with the `clone-post-unsaved-changes` text domain, wired for translation via `wp_set_script_translations()`. The text domain matches the plugin slug, as required for WordPress.org language packs.
 
 ## License
 
