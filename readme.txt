@@ -62,7 +62,7 @@ Open the editor's **⋮ (Options)** menu and choose **Save As**; that item is al
 
 Development happens on GitHub. Bug reports, feature requests, and pull requests are welcome:
 
-[https://github.com/alimuzzaman/save-as-draft](https://github.com/alimuzzaman/save-as-draft)
+[https://github.com/alimuzzaman/clone-post-unsaved-changes](https://github.com/alimuzzaman/clone-post-unsaved-changes)
 
 == Screenshots ==
 

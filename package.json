@@ -19,7 +19,7 @@
     "lint:js": "wp-scripts lint-js",
     "lint:pkg-json": "wp-scripts lint-pkg-json",
     "packages-update": "wp-scripts packages-update",
-    "plugin-zip": "wp-scripts plugin-zip",
+    "plugin-zip": "wp-scripts plugin-zip && mv -f \"$npm_package_name.zip\" \"../$npm_package_name.zip\"",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
