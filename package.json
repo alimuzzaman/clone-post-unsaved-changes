@@ -5,6 +5,7 @@
   "author": "Alimuzzaman Alim (https://profiles.wordpress.org/alimuzzamanalim/)",
   "license": "GPL-2.0-or-later",
   "private": true,
+  "packageManager": "pnpm@10.17.1",
   "keywords": [
     "wordpress",
     "wordpress-plugin",
