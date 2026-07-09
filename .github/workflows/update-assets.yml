@@ -1,0 +1,38 @@
+name: Update Plugin Readme and Assets
+
+# Updates the readme.txt and promotional assets (banners, icons, screenshots)
+# on the WordPress.org plugin directory directly when changes are pushed to main,
+# without triggering a full new version release.
+#
+# Triggered by:
+#  - Commits to the main branch that modify files in `.wordpress-org/` or `readme.txt`.
+#
+# Required repository secrets (Settings → Secrets and variables → Actions):
+#   SVN_USERNAME — your WordPress.org username
+#   SVN_PASSWORD — your WordPress.org password
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.wordpress-org/**'
+      - 'readme.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  update_assets:
+    name: Sync Assets & Readme
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: WordPress.org Asset Update
+        uses: 10up/action-wordpress-plugin-asset-update@stable
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: clone-post-unsaved-changes
