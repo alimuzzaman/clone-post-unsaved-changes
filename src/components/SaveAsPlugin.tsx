@@ -102,7 +102,7 @@ export const SaveAsPlugin = () => {
                         icon={ copy }
                         onClick={ startSaveAs }
                         __next40pxDefaultSize
-                        style={ { width: '100%', justifyContent: 'center' } }
+                        style={ { width: '100%', justifyContent: 'center', marginBottom: '12px' } }
                     >
                         { label }
                     </Button>
