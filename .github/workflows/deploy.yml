@@ -1,11 +1,10 @@
 name: Deploy to WordPress.org
 
-# Publishes a tagged release to the WordPress.org plugin SVN repository.
+# Publishes a tagged release to the WordPress.org plugin SVN repository and
+# uploads the release zip to GitHub.
 #
-# Trigger by publishing a GitHub Release whose tag matches the plugin's
-# Stable tag (e.g. tag `1.0.0` for `Stable tag: 1.0.0`). The build output in
-# `build/` is gitignored, so it is regenerated here before the SVN deploy; the
-# `.distignore` file decides what gets shipped.
+# Triggered by:
+#  - Publishing a GitHub Release (which under the hood creates/pushes a tag)
 #
 # Required repository secrets (Settings → Secrets and variables → Actions):
 #   SVN_USERNAME — your WordPress.org username
@@ -15,9 +14,12 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
-    name: Build and deploy
+    name: Build, Deploy, and Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -39,8 +41,18 @@ jobs:
         run: pnpm build
 
       - name: Deploy to WordPress.org
+        id: deploy
         uses: 10up/action-wordpress-plugin-deploy@stable
+        with:
+          generate-zip: true
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
           SLUG: clone-post-unsaved-changes
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.deploy.outputs.zip-path }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
