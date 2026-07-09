@@ -3,7 +3,7 @@
  * Plugin Name:       Clone Post with Unsaved Changes to a Draft
  * Plugin URI:        https://wordpress.org/plugins/clone-post-unsaved-changes/
  * Description:       Adds a "Save As" button to the block editor that clones the current post or page into a new draft.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 6.6
  * Requires PHP:      7.4
  * Author:            Alimuzzaman Alim

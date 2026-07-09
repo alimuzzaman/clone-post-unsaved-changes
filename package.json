@@ -1,6 +1,6 @@
 {
   "name": "clone-post-unsaved-changes",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Adds a 'Save As' button to the WordPress block editor that clones the current post or page into a new draft.",
   "author": "Alimuzzaman Alim (https://profiles.wordpress.org/alimuzzamanalim/)",
   "license": "GPL-2.0-or-later",

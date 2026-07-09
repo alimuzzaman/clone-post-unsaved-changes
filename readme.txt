@@ -4,7 +4,7 @@ Tags: duplicate post, duplicate page, clone, copy, draft
 Requires at least: 6.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,10 +72,17 @@ Development happens on GitHub. Bug reports, feature requests, and pull requests 
 
 == Changelog ==
 
+
+= 1.0.1 =
+* Fix spacing of the sidebar button and update screenshots to full-page landscape views.
+
 = 1.0.0 =
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+Minor styling fix for sidebar button layout.
 
 = 1.0.0 =
 Initial release.
