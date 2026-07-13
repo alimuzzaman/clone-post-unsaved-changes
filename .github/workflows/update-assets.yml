@@ -35,4 +35,5 @@ jobs:
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          IGNORE_OTHER_FILES: true
           SLUG: clone-post-unsaved-changes
