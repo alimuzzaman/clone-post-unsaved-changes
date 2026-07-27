@@ -6,6 +6,24 @@ import { select, dispatch } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 import type { RestPost } from '../types';
 
+// A failed request can still have reached the server, so only retry a POST when
+// WordPress explicitly says the `meta` parameter is invalid.
+const isMetaValidationError = ( err: unknown ): boolean => {
+    if ( ! err || typeof err !== 'object' ) {
+        return false;
+    }
+
+    const { code, data } = err as {
+        code?: unknown;
+        data?: { params?: Record< string, unknown > };
+    };
+    return (
+        code === 'rest_invalid_param' &&
+        !! data?.params &&
+        Object.prototype.hasOwnProperty.call( data.params, 'meta' )
+    );
+};
+
 // Builds the REST payload from the current (possibly unsaved) edits and creates
 // a brand-new draft. Resolves to the new post on success; throws on failure so
 // callers can decide how to surface the error.
@@ -44,7 +62,7 @@ export const createDraftCopy = async ( title: string ): Promise< RestPost > => {
     } catch ( err ) {
         // Meta keys not exposed to the REST API are rejected; retry once without
         // meta so the copy still succeeds.
-        if ( meta && Object.keys( meta ).length ) {
+        if ( meta && Object.keys( meta ).length && isMetaValidationError( err ) ) {
             newPost = await create( payload );
         } else {
             throw err;
@@ -77,7 +95,13 @@ export const errorMessage = ( err: unknown ): string => {
 // failure as an editor snackbar notice.
 export const quickCopy = ( title: string ): Promise< void > =>
     createDraftCopy( title )
-        .then( ( newPost ) => redirectToEditor( newPost.id ) )
+        .then( ( newPost ) => {
+            ( dispatch( 'core/notices' ) as any ).createSuccessNotice(
+                __( 'Draft created. Opening it now…', 'clone-post-unsaved-changes' ),
+                { type: 'snackbar' }
+            );
+            window.setTimeout( () => redirectToEditor( newPost.id ), 350 );
+        } )
         .catch( ( err ) => {
             ( dispatch( 'core/notices' ) as any ).createErrorNotice(
                 sprintf(

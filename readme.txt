@@ -4,7 +4,7 @@ Tags: duplicate post, duplicate page, clone, copy, draft
 Requires at least: 6.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,7 +21,9 @@ It works for posts, pages, and any public custom post type, and copies the title
 * **Save As button** in the editor header, next to the native *Save* button.
 * The same action is also available in the post sidebar and the editor's **⋮ (Options)** menu.
 * A confirmation dialog lets you set the new draft's title before copying.
+* New draft titles end in **(Copy)**, ready for you to adjust.
 * **"Don't ask next time"** turns the dialog off for instant copies — Ctrl/⌘-click the button to bring it back.
+* Press **Ctrl/⌘ + Alt + S** to open Save As without reaching for the mouse.
 * Hide the toolbar and/or sidebar button from the dialog; the **⋮** menu item always stays available.
 * Copies are always created as **drafts**, so you never overwrite the original.
 * Fully translatable (proper `wp_set_script_translations` integration).
@@ -72,6 +74,12 @@ Development happens on GitHub. Bug reports, feature requests, and pull requests 
 
 == Changelog ==
 
+= 1.0.2 =
+* Prevent duplicate drafts when a Save As request fails for a reason unrelated to post meta.
+* New copies now start with a **(Copy)** title, making them easier to distinguish.
+* Add a Ctrl/⌘ + Alt + S keyboard shortcut for Save As.
+* Show confirmation while the new draft is opening.
+
 
 = 1.0.1 =
 * Fix spacing of the sidebar button and update screenshots to full-page landscape views.
@@ -80,6 +88,9 @@ Development happens on GitHub. Bug reports, feature requests, and pull requests 
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+Improves Save As reliability with a default copy title, keyboard shortcut, and clearer confirmation when opening a new draft.
 
 = 1.0.1 =
 Minor styling fix for sidebar button layout.

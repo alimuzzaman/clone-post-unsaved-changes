@@ -35,6 +35,7 @@ export const SaveAsModal = ( {
     const [ title, setTitle ] = useState( defaultTitle );
     const [ dontAsk, setDontAsk ] = useState( getPref( PREF_KEYS.skipModal ) );
     const [ busy, setBusy ] = useState( false );
+    const [ isComplete, setIsComplete ] = useState( false );
     const [ error, setError ] = useState( '' );
 
     const submit = async () => {
@@ -43,7 +44,8 @@ export const SaveAsModal = ( {
         setPref( PREF_KEYS.skipModal, dontAsk );
         try {
             const newPost = await createDraftCopy( title.trim() );
-            redirectToEditor( newPost.id ); // leaves the page on success
+            setIsComplete( true );
+            window.setTimeout( () => redirectToEditor( newPost.id ), 350 );
         } catch ( err ) {
             // Keep the modal open so the user can retry / adjust the title.
             setError( errorMessage( err ) );
@@ -62,6 +64,14 @@ export const SaveAsModal = ( {
                         // translators: %s: the error message returned by the server.
                         __( 'Could not create the copy: %s', 'clone-post-unsaved-changes' ),
                         error
+                    ) }
+                </Notice>
+            ) }
+            { isComplete && (
+                <Notice status="success" isDismissible={ false }>
+                    { __(
+                        'Draft created. Opening it now…',
+                        'clone-post-unsaved-changes'
                     ) }
                 </Notice>
             ) }
@@ -112,10 +122,12 @@ export const SaveAsModal = ( {
                     variant="primary"
                     onClick={ submit }
                     isBusy={ busy }
-                    disabled={ busy || ! title.trim() }
+                    disabled={ busy || isComplete || ! title.trim() }
                     __next40pxDefaultSize
                 >
-                    { busy
+                    { isComplete
+                        ? __( 'Opening…', 'clone-post-unsaved-changes' )
+                        : busy
                         ? __( 'Creating…', 'clone-post-unsaved-changes' )
                         : __( 'Create draft', 'clone-post-unsaved-changes' ) }
                 </Button>

@@ -4,10 +4,10 @@
  * visibility state.
  */
 import type { ComponentType, ReactNode } from 'react';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
-import { useState, createPortal } from '@wordpress/element';
-import { Button } from '@wordpress/components';
+import { useState, useCallback, createPortal } from '@wordpress/element';
+import { Button, KeyboardShortcuts } from '@wordpress/components';
 import { PluginPostStatusInfo, PluginMoreMenuItem } from '@wordpress/editor';
 import { copy } from '@wordpress/icons';
 import { getPref, setPref, PREF_KEYS } from '../preferences';
@@ -26,6 +26,7 @@ const PostStatusInfo = PluginPostStatusInfo as unknown as ComponentType< {
 const MoreMenuItem = PluginMoreMenuItem as unknown as ComponentType< {
     icon?: unknown;
     onClick?: () => void;
+    shortcut?: { display: string; ariaLabel: string };
     children?: ReactNode;
 } >;
 
@@ -60,17 +61,25 @@ export const SaveAsPlugin = () => {
     // Only inject the toolbar button on an existing, visible-toolbar post.
     const toolbarSlot = useToolbarSlot( ! isNew && ! hideToolbar );
 
+    const copyTitle = currentTitle
+        ? sprintf(
+                /* translators: %s: the original post title. */
+                __( '%s (Copy)', 'clone-post-unsaved-changes' ),
+                currentTitle
+            )
+        : __( '(Copy)', 'clone-post-unsaved-changes' );
+
     // Ctrl/⌘/Alt-click opens the dialog even when "don't ask" is set.
-    const startSaveAs = ( event?: ClickEvent ) => {
+    const startSaveAs = useCallback( ( event?: ClickEvent ) => {
         const force = !! (
             event && ( event.ctrlKey || event.metaKey || event.altKey )
         );
         if ( getPref( PREF_KEYS.skipModal ) && ! force ) {
-            quickCopy( currentTitle );
+            quickCopy( copyTitle );
             return;
         }
         setIsOpen( true );
-    };
+    }, [ copyTitle ] );
 
     // Nothing to copy until the post has been saved at least once.
     if ( isNew ) {
@@ -81,6 +90,10 @@ export const SaveAsPlugin = () => {
 
     return (
         <>
+            <KeyboardShortcuts
+                key={ copyTitle }
+                shortcuts={ { 'mod+alt+s': startSaveAs } }
+            />
             { toolbarSlot &&
                 createPortal(
                     // Match the adjacent native "Save draft" button: link-style
@@ -111,13 +124,23 @@ export const SaveAsPlugin = () => {
 
             { /* Always available — the escape hatch back to this dialog and its
                  visibility settings, even when both buttons are hidden. */ }
-            <MoreMenuItem icon={ copy } onClick={ () => setIsOpen( true ) }>
+            <MoreMenuItem
+                icon={ copy }
+                onClick={ () => setIsOpen( true ) }
+                shortcut={ {
+                    display: __( 'Ctrl/⌘ + Alt + S', 'clone-post-unsaved-changes' ),
+                    ariaLabel: __(
+                        'Control or Command Alt S',
+                        'clone-post-unsaved-changes'
+                    ),
+                } }
+            >
                 { label }
             </MoreMenuItem>
 
             { isOpen && (
                 <SaveAsModal
-                    defaultTitle={ currentTitle }
+                    defaultTitle={ copyTitle }
                     onClose={ () => setIsOpen( false ) }
                     hideToolbar={ hideToolbar }
                     hideSidebar={ hideSidebar }
